@@ -24,6 +24,6 @@ O **DevBills** é um sistema de gestão financeira desenvolvido para ajudar os u
 
 ### Instalação
 
-1. Clone o repositório:
+. Clone o repositório:
    ```bash
    git clone https://github.com/seu_usuario/devbills.git
