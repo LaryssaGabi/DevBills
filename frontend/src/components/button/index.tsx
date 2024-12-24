@@ -2,7 +2,7 @@ import { ComponentProps, forwardRef } from "react";
 import { Container } from "./button-styles";
 
 type ButtonProps = ComponentProps<'button'> & {
-    variant?: 'default' | 'outline'
+    variant?: 'default' | 'outline' | 'text'
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function ({ children, variant = 'default', ...props }, ref) {

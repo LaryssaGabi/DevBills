@@ -18,6 +18,7 @@ export const Container = styled.div`
     justify-content: space-between;
     position: relative;
     padding: 0.75rem 0;
+    gap: 0.5rem;
 
     span{
         font-size: 0.75rem;
@@ -46,7 +47,7 @@ export const Info = styled.div`
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        gap: 0.5rem;
+        gap: 0.8rem;
     }
 
     strong{
@@ -67,7 +68,7 @@ export const Content = styled.div<ContentType>`
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 0.25rem;
+    gap: 0.5rem;
 
     strong{
         font-size: 0.875rem;
