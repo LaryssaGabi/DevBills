@@ -1,10 +1,10 @@
 /* eslint-disable react-refresh/only-export-components */
-import { ReactNode, createContext, useCallback, useContext, useState, } from 'react';
+import { ReactNode, createContext, useCallback, useContext, useState } from 'react';
 
 import { APIService } from '../services/api';
-import { Category, Dashboard, FinancialEvolution, Transaction, } from '../services/api-types';
+import { Category, Dashboard, FinancialEvolution, Transaction } from '../services/api-types';
 
-import { CreateCategoryData, CreateTransactionData, FinancialEvolutionFilterData, TransactionsFilterData, } from '../validators/types';
+import { CreateCategoryData, CreateTransactionData, FinancialEvolutionFilterData, TransactionsFilterData } from '../validators/types';
 import { formatDate } from '../utils/format-date';
 
 interface FetchAPIProps {
@@ -18,6 +18,7 @@ interface FetchAPIProps {
     fetchFinancialEvolution: (filters: FinancialEvolutionFilterData) => Promise<void>;
     categories: Category[];
     transactions: Transaction[];
+    deleteTransaction: (id: string) => Promise<void>;
 }
 
 const FetchAPIContext = createContext<FetchAPIProps>({} as FetchAPIProps);
@@ -27,9 +28,9 @@ type FetchAPIProviderProps = {
 };
 
 export function FetchAPIProvider({ children }: FetchAPIProviderProps) {
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
-    const [dashboard, setDashboard] = useState<Dashboard>({} as Dashboard);
+    const [categories, setCategories] = useState<Category[]>([]); 
+    const [transactions, setTransactions] = useState<Transaction[]>([]); 
+    const [dashboard, setDashboard] = useState<Dashboard>({} as Dashboard); 
     const [financialEvolution, setFinancialEvolution] = useState<FinancialEvolution[]>([]);
 
     const createTransaction = useCallback(async (data: CreateTransactionData) => {
@@ -46,7 +47,6 @@ export function FetchAPIProvider({ children }: FetchAPIProviderProps) {
 
     const fetchCategories = useCallback(async () => {
         const data = await APIService.getCategories();
-
         setCategories(data);
     }, []);
 
@@ -77,6 +77,12 @@ export function FetchAPIProvider({ children }: FetchAPIProviderProps) {
         setFinancialEvolution(financialEvolution);
     }, []);
 
+    const deleteTransaction = useCallback(async (id: string) => {
+        await APIService.deleteTransaction(id);  
+        setTransactions((prevTransactions) => prevTransactions.filter((transaction) => transaction._id !== id)); 
+    }, []);
+
+
     return (
         <FetchAPIContext.Provider
             value={{
@@ -90,6 +96,7 @@ export function FetchAPIProvider({ children }: FetchAPIProviderProps) {
                 dashboard,
                 fetchFinancialEvolution,
                 financialEvolution,
+                deleteTransaction
             }}
         >
             {children}

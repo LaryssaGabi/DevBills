@@ -21,9 +21,11 @@
     "cors": "^2.8.5",
     "dayjs": "^1.11.12",
     "frontend": "file:",
+    "lucide-react": "^0.469.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.2",
+    "react-toastify": "^11.0.2",
     "styled-components": "^6.1.12",
     "zod": "^3.23.8"
   },

@@ -55,8 +55,15 @@ export class TransactionsService {
 
 
     async getFinancialEvolution({ year }: GetFinancialEvolutionDTO): Promise<Balance[]> {
-        const financialEvolution = await this.transactionsRepository.getFinancialEvolution({year})
-        
+        const financialEvolution = await this.transactionsRepository.getFinancialEvolution({ year })
         return financialEvolution;
+    }
+
+    async delete(id: string): Promise<boolean> {
+        const transaction = await this.transactionsRepository.delete(id);
+        if (!transaction) {
+            throw new AppError("Transaction not found.", StatusCodes.NOT_FOUND);
+        }
+        return true;
     }
 }

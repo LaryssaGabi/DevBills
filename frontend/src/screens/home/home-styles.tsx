@@ -25,6 +25,15 @@ export const Main = styled.main`
   gap: 0.75rem;
   width: 100%;
   padding: 0 1.5rem 1.5rem 1.5rem;
+  @media screen and (max-width: 1290px) {
+    display: grid;
+    grid-template-areas:
+      "chart"
+      "transactions"
+      "aside";
+    grid-template-columns: 1fr; 
+    gap: 1rem;
+  }
 `;
 
 export const Section = styled.section`
@@ -32,6 +41,10 @@ export const Section = styled.section`
   flex-direction: column;
   gap: 0.75rem;
   width: 100%;
+
+  @media screen and (max-width: 1290px) {
+    grid-area: transactions;
+  }
 `;
 
 export const Filters = styled.div`
@@ -69,6 +82,10 @@ export const ChartContainer = styled.div`
     align-items: flex-start;
     justify-content: space-between;
   }
+
+  @media screen and (max-width: 1290px) {
+    grid-area: chart;
+  }
 `;
 
 export const ChartContent = styled.div`
@@ -95,6 +112,11 @@ export const Aside = styled.aside`
     display: flex;
     flex-direction: column;
     gap: 1rem;
+  }
+
+  @media screen and (max-width: 1290px) {
+    grid-area: aside;
+    min-width: 100%; 
   }
 `;
 

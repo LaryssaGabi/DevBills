@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios';
 
 import { Category, CreateCategory, CreateTransaction, Dashboard, DashboardFilters, FinancialEvolution, FinancialEvolutionFilters, Transaction, TransactionsFilter, } from './api-types';
@@ -70,5 +71,14 @@ export class APIService {
     );
 
     return data;
+  }
+
+
+  static async deleteTransaction(id: string): Promise<void> {
+    try {
+      await APIService.client.delete(`/transactions/${id}`);
+    } catch (error: any) {
+      throw new Error(`Erro ao excluir transação: ${error.response?.data?.message || error.message || 'Erro desconhecido'}`);
+    }
   }
 }

@@ -67,3 +67,7 @@ export type FinancialEvolution = {
   expense: number;
   balance: number;
 };
+
+export type DeleteTransaction = {
+  _id: string;
+};

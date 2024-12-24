@@ -40,3 +40,11 @@ export const getFinancialEvolutionSchema = {
 
 const getFinancialEvolutionObject = z.object(getFinancialEvolutionSchema)
 export type GetFinancialEvolutionDTO = z.infer<typeof getFinancialEvolutionObject>
+
+
+export const deleteTransactionSchema = {
+    id: z.string(),
+};
+
+const deleteTransactionObject = z.object(deleteTransactionSchema);
+export type DeleteTransactionDTO = z.infer<typeof deleteTransactionObject>;

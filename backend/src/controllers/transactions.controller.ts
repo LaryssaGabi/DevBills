@@ -56,6 +56,21 @@ export class TransactionsController {
         }
     }
 
-
-
+    delete = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { id } = req.params; 
+            const deleted = await this.transactionsService.delete(id);
+    
+            if (!deleted) {
+                return res.status(StatusCodes.NOT_FOUND).json({ message: "Transação não encontrada" });
+            }
+    
+            return res.status(StatusCodes.OK).json({ message: "Transação deletada com sucesso" });
+        } catch (err) {
+            next(err);
+        }
+    };
+    
+    
+    
 }

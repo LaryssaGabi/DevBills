@@ -48,3 +48,9 @@ export const createTransactionSchema = z.object({
 export const financialEvolutionFilterSchema = z.object({
     year: z.string().regex(/\d/, { message: 'Digite um ano válido' }),
 });
+
+export const deleteTransactionSchema = z.object({
+  id: z.string().min(24, "ID deve ter 24 caracteres").max(24, "ID deve ter 24 caracteres"),
+});
+
+

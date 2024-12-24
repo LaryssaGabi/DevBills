@@ -8,4 +8,3 @@ export const CategorySchema = new mongoose.Schema({
 )
 
 export const CategoryModel = mongoose.model('Category', CategorySchema)
-
