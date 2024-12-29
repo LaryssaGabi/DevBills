@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import { CategoriesRepository } from "../database/repositories/categories.repository";
 import { TransactionsRepository } from "../database/repositories/transactions.repository";
-import { CreateTransactionDTO, GetDashboardDTO, GetFinancialEvolutionDTO, IndexTransactionsDTO } from "../dtos/transactions.dto";
+import { CreateTransactionDTO, GetDashboardDTO, GetFinancialEvolutionDTO, IndexTransactionsDTO, UpdateTransactionDTO } from "../dtos/transactions.dto";
 import { Transaction } from "../entities/transactions.entity";
 import { AppError } from "../errors/app.error";
 import { Balance } from "../entities/balance.entity";
@@ -65,5 +65,32 @@ export class TransactionsService {
             throw new AppError("Transaction not found.", StatusCodes.NOT_FOUND);
         }
         return true;
+    }
+
+    async update(id: string, { amount, categoryId, title, date, type }: UpdateTransactionDTO): Promise<Transaction> {
+        
+        const transaction = await this.transactionsRepository.findById(id);
+        if (!transaction) {
+            throw new AppError('Transaction not found.', StatusCodes.NOT_FOUND);
+        }
+
+       
+        if (categoryId) {
+            const category = await this.categoriesRepository.findById(categoryId);
+            if (!category) {
+                throw new AppError('Category does not exist.', StatusCodes.NOT_FOUND);
+            }
+            transaction.category = category; 
+        }
+
+        transaction.title = title ?? transaction.title;
+        transaction.amount = amount ?? transaction.amount;
+        transaction.date = date ?? transaction.date;
+        transaction.type = type ?? transaction.type;
+
+       
+        const updatedTransaction = await this.transactionsRepository.update(id, transaction);
+
+        return updatedTransaction;
     }
 }

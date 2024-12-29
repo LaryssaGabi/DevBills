@@ -1,4 +1,4 @@
-import { CreateTransactionDTO, GetDashboardDTO, GetFinancialEvolutionDTO, IndexTransactionsDTO } from "../../dtos/transactions.dto";
+import { CreateTransactionDTO, GetDashboardDTO, GetFinancialEvolutionDTO, IndexTransactionsDTO, UpdateTransactionDTO } from "../../dtos/transactions.dto";
 import { Balance } from "../../entities/balance.entity";
 import { Expense } from "../../entities/expense.entity";
 import { Transaction, TransactionType } from "../../entities/transactions.entity";
@@ -190,5 +190,26 @@ export class TransactionsRepository {
     
         return transaction.toObject<Transaction>(); 
     }
+
+    async findById(id: string): Promise<Transaction | null> {
+        const transaction = await this.model.findById(id);
+        if (!transaction) {
+            return null; 
+        }
+        return transaction.toObject<Transaction>(); 
+    }
     
+    async update(id: string, updateData: UpdateTransactionDTO): Promise<Transaction> {
+        const transaction = await this.model.findById(id);
+        if (!transaction) {
+            throw new AppError("Transaction not found.", StatusCodes.NOT_FOUND);
+        }
+
+        const updatedTransaction = await this.model.findByIdAndUpdate(id, updateData, { new: true });
+        if (!updatedTransaction) {
+            throw new AppError("Failed to update transaction.", StatusCodes.INTERNAL_SERVER_ERROR);
+        }
+
+        return updatedTransaction.toObject<Transaction>();
+    }
 }

@@ -71,3 +71,7 @@ export type FinancialEvolution = {
 export type DeleteTransaction = {
   _id: string;
 };
+
+export type UpdateTransaction = Partial<CreateTransaction> & {
+  _id: string;
+};

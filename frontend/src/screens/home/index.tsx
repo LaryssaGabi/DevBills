@@ -202,7 +202,7 @@ export function Home() {
                                         variant={item.type}
                                     />
                                     <div style={{ display: 'flex', gap: '8px' }}>
-                                        <EditTransactionForm />
+                                        <EditTransactionForm transaction={item}/>
                                         <DeleteTransactionForm
                                             item={item}
                                             onDelete={handleDeleteTransaction}

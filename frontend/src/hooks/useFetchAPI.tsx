@@ -19,6 +19,7 @@ interface FetchAPIProps {
     categories: Category[];
     transactions: Transaction[];
     deleteTransaction: (id: string) => Promise<void>;
+    updateTransaction: (id: string, data: CreateTransactionData) => Promise<void>;
 }
 
 const FetchAPIContext = createContext<FetchAPIProps>({} as FetchAPIProps);
@@ -82,6 +83,20 @@ export function FetchAPIProvider({ children }: FetchAPIProviderProps) {
         setTransactions((prevTransactions) => prevTransactions.filter((transaction) => transaction._id !== id)); 
     }, []);
 
+    const updateTransaction = useCallback(async (id: string, data: CreateTransactionData) => {
+        const updatedTransaction = await APIService.updateTransaction(id, {
+            ...data,
+            date: formatDate(data.date),
+            amount: Number(data.amount.replace(/[^0-9]/g, '')),
+        });
+    
+          setTransactions((prevTransactions) =>
+            prevTransactions.map((transaction) =>
+                transaction._id === id ? { ...transaction, ...updatedTransaction } : transaction
+            )
+        );
+    }, []);
+    
 
     return (
         <FetchAPIContext.Provider
@@ -96,7 +111,8 @@ export function FetchAPIProvider({ children }: FetchAPIProviderProps) {
                 dashboard,
                 fetchFinancialEvolution,
                 financialEvolution,
-                deleteTransaction
+                deleteTransaction,
+                updateTransaction
             }}
         >
             {children}

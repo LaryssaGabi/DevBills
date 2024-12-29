@@ -48,3 +48,14 @@ export const deleteTransactionSchema = {
 
 const deleteTransactionObject = z.object(deleteTransactionSchema);
 export type DeleteTransactionDTO = z.infer<typeof deleteTransactionObject>;
+
+export const updateTransactionsSchema = {
+    title: z.string().optional(),
+    amount: z.number().int().positive().optional(),
+    type: z.nativeEnum(TransactionType).optional(),
+    date: z.coerce.date().optional(),
+    categoryId: z.string().length(24).optional(),
+};
+
+const updateTransactionObject = z.object(updateTransactionsSchema);
+export type UpdateTransactionDTO = z.infer<typeof updateTransactionObject>;

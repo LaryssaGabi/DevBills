@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Button } from '../button';
 import { Dialog } from '../dialog';
 import { Title } from '../title';
@@ -7,6 +7,10 @@ import { Container, StyledIcon, Options } from './settings-styler';
 
 export function Settings() {
   const [open, setOpen] = useState(false);
+
+  const handleClose = useCallback(() => {
+    setOpen(false);
+  }, []);
 
   return (
     <Dialog open={open} onOpenChange={setOpen} trigger={<StyledIcon />}>
@@ -20,6 +24,12 @@ export function Settings() {
             Sair Da Conta
           </Button>
         </Options>
+
+        <footer>
+          <Button onClick={handleClose} variant="outline" type="button">
+            Cancelar
+          </Button>
+        </footer>
       </Container>
     </Dialog>
   );

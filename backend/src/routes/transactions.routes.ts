@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { ParamsType, validator } from "../middlewares/validator.middleware";
-import { createTransactionsSchema, getDashboardSchema, getFinancialEvolutionSchema, indexTransactionsSchema, deleteTransactionSchema } from "../dtos/transactions.dto";
+import { createTransactionsSchema, indexTransactionsSchema, getDashboardSchema, getFinancialEvolutionSchema, deleteTransactionSchema, updateTransactionsSchema } from "../dtos/transactions.dto";
 import { TransactionsController } from "../controllers/transactions.controller";
 import { TransactionsFactory } from "../factories/transactions.factory";
 
@@ -40,11 +40,18 @@ transactionsRoutes.get('/financial-evolution',
     controller.getFinancialEvolution
 );
 
-
 transactionsRoutes.delete('/:id',
     validator({
         schema: deleteTransactionSchema,
         type: ParamsType.PARAMS,
     }),
     controller.delete
+);
+
+transactionsRoutes.put('/:id',
+    validator({
+        schema: updateTransactionsSchema,
+        type: ParamsType.BODY,
+    }),
+    controller.update
 );

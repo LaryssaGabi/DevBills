@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-
 import { useFetchAPI } from '../../hooks/useFetchAPI';
 import { createTransactionSchema } from '../../validators/schemas';
 import { CreateTransactionData } from '../../validators/types';
@@ -14,15 +13,37 @@ import { Input } from '../input';
 import { Title } from '../title';
 import { Container, Content, CurrencyInput, ErrorMessage, InputGroup, RadioForm, RadioGroup, StyledIcon, } from './styles-edit-transaction';
 
-export function EditTransactionForm() {
-  const { categories, fetchCategories, createTransaction } = useFetchAPI();
+type EditTransactionFormProps = {
+  transaction?: {
+    _id: string;
+    title: string;
+    date: Date;
+    amount: number;
+    type: 'income' | 'expense';
+    category: {
+      _id: string;
+      title: string;
+      color: string;
+    };
+  };
+};
+
+export function EditTransactionForm({ transaction }: EditTransactionFormProps) {
+  const { categories, fetchCategories, updateTransaction } = useFetchAPI();
   const [open, setOpen] = useState(false);
-  const { register, reset, formState: { errors }, handleSubmit, } = useForm<CreateTransactionData>({
+
+  const {
+    register,
+    reset,
+    setValue,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<CreateTransactionData>({
     defaultValues: {
       categoryId: 'null',
       title: '',
       amount: '',
-      date: dayjs('2024-01-01').format('DD/MM/YYYY'),
+      date: dayjs().format('DD/MM/YYYY'),
       type: 'income',
     },
     resolver: zodResolver(createTransactionSchema),
@@ -32,6 +53,17 @@ export function EditTransactionForm() {
     fetchCategories();
   }, [fetchCategories]);
 
+
+  useEffect(() => {
+    if (transaction && open) {
+      setValue('categoryId', transaction.category._id);
+      setValue('title', transaction.title);
+      setValue('amount', transaction.amount.toString());
+      setValue('date', dayjs(transaction.date).format('DD/MM/YYYY'));
+      setValue('type', transaction.type);
+    }
+  }, [transaction, open, setValue]);
+
   const handleClose = useCallback(() => {
     reset();
     setOpen(false);
@@ -39,10 +71,12 @@ export function EditTransactionForm() {
 
   const onSubmit = useCallback(
     async (data: CreateTransactionData) => {
-      await createTransaction(data);
+      if (transaction) {
+        await updateTransaction(transaction._id, data);
+      }
       handleClose();
     },
-    [handleClose, createTransaction],
+    [transaction, handleClose, updateTransaction]
   );
 
   return (
@@ -51,7 +85,6 @@ export function EditTransactionForm() {
       onOpenChange={setOpen}
       trigger={<StyledIcon />}
     >
-
       <Container>
         <Title
           title="Editar Transação"
@@ -64,11 +97,12 @@ export function EditTransactionForm() {
               <label>Categoria</label>
               <select {...register('categoryId')}>
                 <option value="null">Selecione uma categoria...</option>
-                {categories?.length && categories.map((item) => (
-                  <option key={item._id} value={item._id}>
-                    {item.title}
-                  </option>
-                ))}
+                {categories?.length &&
+                  categories.map((item) => (
+                    <option key={item._id} value={item._id}>
+                      {item.title}
+                    </option>
+                  ))}
               </select>
               {errors.categoryId && (
                 <ErrorMessage>{errors.categoryId.message}</ErrorMessage>
@@ -130,7 +164,6 @@ export function EditTransactionForm() {
                 <ErrorMessage>{errors.type.message}</ErrorMessage>
               )}
             </RadioForm>
-
           </Content>
 
           <footer>
@@ -139,10 +172,8 @@ export function EditTransactionForm() {
             </Button>
             <Button type="submit">Atualizar</Button>
           </footer>
-
         </form>
       </Container>
-
-    </Dialog >
+    </Dialog>
   );
 }

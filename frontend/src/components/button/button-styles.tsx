@@ -24,11 +24,9 @@ export const Container = styled.button<ContainerProps>`
         props.$variant === 'text' ? '0' : '0 0.75rem'};
     transition: all 100ms;
 
-    ${(props) =>
-        props.$variant === 'outline' &&
-        css`
-            border: 1px solid ${theme.colors.primary};
-        `}
+    ${(props) => props.$variant === 'outline' && css`
+        border: 1px solid ${theme.colors.primary};
+    `}
 
     ${(props) =>
         props.$variant === 'text' &&
@@ -44,8 +42,7 @@ export const Container = styled.button<ContainerProps>`
             }
         `}
 
-    &:hover {
-        background-color: ${(props) =>
-            props.$variant === 'default' ? theme.colors.primaryDarck : 'transparent'};
+    &:hover{
+        background-color: ${theme.colors.primaryDarck};
     }
 `;
