@@ -5,9 +5,8 @@ import { CreateTransactionDTO, GetDashboardDTO, GetFinancialEvolutionDTO, IndexT
 import { BodyRequest, QueryRequest } from "./types";
 
 interface ParamsId {
-    id: string; 
+    id: string;
 }
-
 
 export class TransactionsController {
     private transactionsService: TransactionsService;
@@ -15,7 +14,6 @@ export class TransactionsController {
     constructor(transactionsService: TransactionsService) {
         this.transactionsService = transactionsService;
     }
-
 
     create = async (req: BodyRequest<CreateTransactionDTO>, res: Response, next: NextFunction) => {
         try {
@@ -80,23 +78,22 @@ export class TransactionsController {
         }
     };
    
-    update = async (req: BodyRequest<UpdateTransactionDTO, ParamsId>, res: Response, next: NextFunction) => {
+    update = async (req: Request<ParamsId, any, UpdateTransactionDTO>, res: Response, next: NextFunction) => {
         try {
-            const { id } = req.params;
+            const { id } = req.params; 
             const { title, amount, categoryId, type, date } = req.body;
-    
+
             const result = await this.transactionsService.update(id, { title, amount, categoryId, type, date });
-    
+
             if (!result) {
                 return res.status(StatusCodes.NOT_FOUND).json({ message: "Transação não encontrada" });
             }
-    
+
             return res.status(StatusCodes.OK).json(result);
         } catch (err) {
             next(err);
         }
     };
-    
-    
+
     
 }
